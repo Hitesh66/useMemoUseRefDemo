@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Use Memo Demo</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <h1>Use Memo Demo</h1>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      function Counter(props) {
+        const [number, setNumber] = React.useState(0);
+        const [dark, setDark] = React.useState(false);
+        const doubleNumber = React.useMemo(() => {
+          return slowFunction(number);
+        }, [number]);
+        const themeStyles = React.useMemo(() => {
+          return {
+            backgroundColor: dark ? "black" : "white",
+            color: dark ? "white" : "black",
+          };
+        }, [dark]);
+        React.useEffect(() => {
+          console.log("theme changed");
+        }, [themeStyles]);
+        return (
+          <div>
+            <input
+              type="number"
+              value={number}
+              onChange={(e) => setNumber(parseInt(e.target.value))}
+            />
+            <button onClick={() => setDark((prevDark) => !prevDark)}>
+              ChangeTheme
+            </button>
+            <div style={themeStyles}>{doubleNumber}</div>
+          </div>
+        );
+      }
+      function slowFunction(num) {
+        console.log("Slow function");
+        for (let i = 0; i <= 10000000; i++) {}
+        return num * 2;
+      }
+
+      ReactDOM.createRoot(document.querySelector("#root")).render(<Counter />);
+    </script>
+  </body>
+</html>

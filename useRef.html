@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Use Ref Demo</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+  </head>
+  <body>
+    <h1>Use Ref Demo</h1>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      function Counter(props) {
+        const [name, setName] = React.useState("");
+        const renderCount = React.useRef(1);
+        React.useEffect(() => {
+          renderCount.current = renderCount.current + 1;
+        });
+        const inputRef = React.useRef();
+        console.log(inputRef);
+        function focus() {
+          inputRef.current.focus();
+        }
+        return (
+          <div>
+            <input
+              ref={inputRef}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <div>My name is {name}</div>
+            <div>I rendered {renderCount.current} times</div>
+            <button onClick={focus}>Focus</button>
+          </div>
+        );
+      }
+
+      ReactDOM.createRoot(document.querySelector("#root")).render(<Counter />);
+    </script>
+  </body>
+</html>
